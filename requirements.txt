@@ -1,0 +1,8 @@
+flask
+pillow
+pytesseract
+pandas
+fuzzywuzzy
+python-Levenshtein
+matplotlib
+wordcloud

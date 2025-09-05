@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MedScan AI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>MedScan AI</h1>
+  <form id="form">
+    <input type="file" id="file" accept="image/*" required>
+    <button>Scan</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('form').onsubmit = async e => {
+      e.preventDefault();
+      const f = document.getElementById('file').files[0];
+      const formData = new FormData();
+      formData.append('file', f);
+
+      const res = await fetch('/scan', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      const result = document.getElementById('result');
+      if (data.error) {
+        result.innerHTML = `<p class="error">${data.error}</p>`;
+      } else {
+        result.innerHTML = `
+          <h2>${data.medicine.toUpperCase()}</h2>
+          <p><b>Usage:</b> ${data.info.usage}</p>
+          <p><b>Benefits:</b> ${data.info.benefits}</p>
+          <p><b>Disadvantages:</b> ${data.info.disadvantages}</p>
+        `;
+      }
+    };
+  </script>
+</body>
+</html>
